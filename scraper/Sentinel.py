@@ -88,7 +88,7 @@ def parse(directory='.', genre='All'):
                     if first.startswith('INT') or first.startswith('EXT'):
                         char = False
                         heading = re.sub(r'^\W*(INT|EXT).?\W*', '', deline)
-                        # categories['headings'].append(heading)
+                        categories['headings'].append(heading)
 
                     elif line.isupper():
                         # Transition
@@ -99,7 +99,7 @@ def parse(directory='.', genre='All'):
 
                         # Character
                         else:
-                            # categories['characters'].append(deline)
+                            categories['characters'].append(deline)
                             char = True
 
                     elif char:
@@ -112,13 +112,13 @@ def parse(directory='.', genre='All'):
                         else:
                             char = False
                             num_lines, ml_dia = get_lines_from_block(screenplay[i:i+80])
-                            # categories['dialogue'].append(ml_dia)
+                            categories['dialogue'].append(ml_dia)
                             i += num_lines
 
                     # Action
                     else: 
                         num_lines, ml_act = get_lines_from_block(screenplay[i:i+40])
-                        # categories['actions'].append(ml_act)
+                        categories['actions'].append(ml_act)
                         i += num_lines 
 
                 i += 1
