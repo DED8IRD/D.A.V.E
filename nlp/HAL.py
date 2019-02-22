@@ -1,35 +1,64 @@
 # HAL.py
 """
-Generates tab formatted screenplay using Markov chains
+Generates sentences through Markov chains, using markovify
 """
+
 import markovify
 import os
 
-def generate_models(source_dir, target_dir='.'):
+class HAL:
     """
-    Generates markov models for each category and genre 
-    and savese them as JSON
+    HAL represents a Markov model. 
     """
-    if not os.path.exists(target_dir):
-        os.makedirs(target_dir)
 
-    for filename in os.listdir(source_dir):
-        print(filename)
-        path = os.path.join(source_dir, filename)
-        with open(path, encoding='utf-8') as f:
-            corpus = f.read()
-        # create markov model from file
-        model = markovify.Text(corpus, retain_original=False).to_json()
-        export_path = os.path.join(target_dir, f'{filename}.json')
-        with open(export_path, 'w', encoding='utf-8') as f:
-            f.write(model)
+    def __init__(self, *args):
+        """
+        Initializes HAL object by combining Markov models from args
+        """
+        self.model = None
+
+        for arg in args:
+            if type(arg) is str and arg.endswith('.json'):
+                with open(arg) as f:
+                    model = markovify.Text.from_json(f.read())
+
+                if self.model:
+                    self.model = markovify.combine(models=[self.model, model])
+                else:
+                    self.model = model
+                
+            # else:
+            #     raise 
 
 
-def screenwrite(source):
-    pass
+    def generate_sentence(self, max_length=None):
+        """
+        Generates sentence given a category
+
+        :max_length: int or None : max_length for sentence
+        :return: str : markovify generated sentence
+        """
+        if max_length:
+            return self.model.make_short_sentence(max_length)
+        return self.model.make_sentence()
 
 
-if __name__ == '__main__':
-    source = os.path.join('..','scraper', 'parsed_categories')
-    destination = 'markov_models'
-    generate_models(source, destination)
+    @staticmethod
+    def generate_models(source_dir, target_dir='.'):
+        """
+        Generates Markov models for each category and genre 
+        and saves them as JSON
+        """
+        if not os.path.exists(target_dir):
+            os.makedirs(target_dir)
+
+        for filename in os.listdir(source_dir):
+            print(filename)
+            path = os.path.join(source_dir, filename)
+            with open(path, encoding='utf-8') as f:
+                corpus = f.read()
+            # create markov model from file
+            model = markovify.Text(corpus, retain_original=False).to_json()
+            export_path = os.path.join(target_dir, f'{filename}.json')
+            with open(export_path, 'w', encoding='utf-8') as f:
+                f.write(model)
