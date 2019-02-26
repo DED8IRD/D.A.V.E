@@ -84,7 +84,7 @@ def parse(directory='.', genre='All'):
                     pass
                 else:
                     # Heading
-                    first = deline.split()[0].upper()
+                    first = deline.split()[0]
                     if first.startswith('INT') or first.startswith('EXT'):
                         char = False
                         heading = re.sub(r'^\W*(INT|EXT).?\W*', '', deline)
@@ -107,7 +107,6 @@ def parse(directory='.', genre='All'):
                         if deline[0] == '(':
                             if deline[-1] == ')':
                                 categories['parentheticals'].append(deline[1:len(deline)-1])
-
                         # Dialogue
                         else:
                             char = False
@@ -125,10 +124,9 @@ def parse(directory='.', genre='All'):
 
     # write to files
     for key in categories:
-        if key == 'parentheticals':
-            filename = f'./parsed_categories/{key.upper()}_{genre}'
-            with open(filename, 'w', encoding='utf-8') as f:
-                f.write('\n'.join(categories['headings']))
+        filename = f'./parsed_categories/{key.upper()}_{genre}'
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write('\n'.join(categories['headings']))
 
     return categories
 
