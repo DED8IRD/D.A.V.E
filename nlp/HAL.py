@@ -6,9 +6,10 @@ Generates sentences through Markov chains, using markovify
 import markovify
 import os
 
+
 class HAL:
     """
-    HAL represents a Markov model. 
+    HAL represents a Markov model.
     """
 
     def __init__(self, *args):
