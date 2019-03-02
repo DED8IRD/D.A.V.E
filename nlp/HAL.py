@@ -54,12 +54,16 @@ class HAL:
             os.makedirs(target_dir)
 
         for filename in os.listdir(source_dir):
-            print(filename)
-            path = os.path.join(source_dir, filename)
-            with open(path, encoding='utf-8') as f:
-                corpus = f.read()
-            # create markov model from file
-            model = markovify.Text(corpus, retain_original=False).to_json()
-            export_path = os.path.join(target_dir, f'{filename}.json')
-            with open(export_path, 'w', encoding='utf-8') as f:
-                f.write(model)
+            if filename.startswith('PAREN'):
+                print(filename)
+                path = os.path.join(source_dir, filename)
+                with open(path, encoding='utf-8') as f:
+                    corpus = f.read()
+                # create markov model from file
+                try:
+                    model = markovify.Text(corpus, retain_original=False).to_json()
+                except:
+                    pass
+                export_path = os.path.join(target_dir, f'{filename}.json')
+                with open(export_path, 'w', encoding='utf-8') as f:
+                    f.write(model)

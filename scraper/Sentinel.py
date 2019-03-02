@@ -64,14 +64,22 @@ def parse(directory='.', genre='All'):
             print('Parsing', filename, '...')
             parsed_genre = parse(filepath, genre=filename)
             print(f'Finished in {time.time() - start} s')
-            for category in parsed_genre:
-                categories[category] += parsed_genre[category]
 
-        if filename.endswith('.html'):
+            if parsed_genre:
+                for category in parsed_genre:
+                    categories[category] += parsed_genre[category]
+
+                # write to files
+                for key in categories:
+                    filename = f'./parsed_categories/{key.upper()}_{genre}'
+                    with open(filename, 'w', encoding='utf-8') as f:
+                        f.write('\n'.join(categories[key]))
+
+        elif filename.endswith('.html'):
             filename = os.path.join(directory, filename)
+            # print(filename)
             with open(filename, encoding='utf-8') as f:
                 screenplay = f.readlines()
-
             char = False
             i = 0
 
@@ -90,11 +98,17 @@ def parse(directory='.', genre='All'):
                         heading = re.sub(r'^\W*(INT|EXT).?\W*', '', deline)
                         categories['headings'].append(heading)
 
-                    elif line.isupper():
+                    # Parenthetical
+                    elif deline[0] == '(':
+                        if deline[-1] == ')':
+                            categories['parentheticals'].append(deline[1:len(deline)-1])
+
+                    elif deline.isupper():
+
                         # Transition
-                        if deline in ['CUT TO:', 'FADE IN:', 'FADE OUT:', 
-                                      'DISSOLVE TO:', 'SMASH CUT:', 'END CREDITS:', 
-                                      'CUT TO BLACK:', 'CONTINUED:', '(CONTINUED)']:
+                        if deline.strip(':') in ['CUT TO', 'FADE IN', 'FADE OUT', 
+                                      'DISSOLVE TO', 'SMASH CUT', 'END CREDITS', 
+                                      'CUT TO BLACK', 'CONTINUED', '(CONTINUED)']:
                             pass
 
                         # Character
@@ -102,17 +116,12 @@ def parse(directory='.', genre='All'):
                             categories['characters'].append(deline)
                             char = True
 
+                    # Dialogue
                     elif char:
-                        # Parenthetical
-                        if deline[0] == '(':
-                            if deline[-1] == ')':
-                                categories['parentheticals'].append(deline[1:len(deline)-1])
-                        # Dialogue
-                        else:
-                            char = False
-                            num_lines, ml_dia = get_lines_from_block(screenplay[i:i+80])
-                            categories['dialogue'].append(ml_dia)
-                            i += num_lines
+                        char = False
+                        num_lines, ml_dia = get_lines_from_block(screenplay[i:i+80])
+                        categories['dialogue'].append(ml_dia)
+                        i += num_lines
 
                     # Action
                     else: 
@@ -122,13 +131,7 @@ def parse(directory='.', genre='All'):
 
                 i += 1
 
-    # write to files
-    for key in categories:
-        filename = f'./parsed_categories/{key.upper()}_{genre}'
-        with open(filename, 'w', encoding='utf-8') as f:
-            f.write('\n'.join(categories['headings']))
-
-    return categories
+            return categories
 
 
 if __name__ == '__main__':
