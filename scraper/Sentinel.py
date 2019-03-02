@@ -51,7 +51,6 @@ def parse(directory='.', genre='All'):
     categories = {
         'headings': [],
         'actions': [],
-        'characters': [],
         'dialogue': [],
         'parentheticals': []
     }
@@ -65,15 +64,9 @@ def parse(directory='.', genre='All'):
             parsed_genre = parse(filepath, genre=filename)
             print(f'Finished in {time.time() - start} s')
 
-            if parsed_genre:
-                for category in parsed_genre:
-                    categories[category] += parsed_genre[category]
+            for category in parsed_genre:
+                categories[category] += parsed_genre[category]
 
-                # write to files
-                for key in categories:
-                    filename = f'./parsed_categories/{key.upper()}_{genre}'
-                    with open(filename, 'w', encoding='utf-8') as f:
-                        f.write('\n'.join(categories[key]))
 
         elif filename.endswith('.html'):
             filename = os.path.join(directory, filename)
@@ -113,7 +106,6 @@ def parse(directory='.', genre='All'):
 
                         # Character
                         else:
-                            categories['characters'].append(deline)
                             char = True
 
                     # Dialogue
@@ -131,7 +123,13 @@ def parse(directory='.', genre='All'):
 
                 i += 1
 
-            return categories
+    # write to files
+    if genre != 'All':
+        for key in categories:
+            filename = f'./parsed_categories/{key.upper()}_{genre}'
+            with open(filename, 'w', encoding='utf-8') as f:
+                f.write('\n'.join(categories[key]))
+        return categories
 
 
 if __name__ == '__main__':
