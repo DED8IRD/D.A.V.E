@@ -4,6 +4,7 @@ Generates sentences through Markov chains, using markovify
 """
 
 import markovify
+import json
 import os
 
 
@@ -20,13 +21,23 @@ class HAL:
 
         for arg in args:
             if type(arg) is str and arg.endswith('.json'):
-                with open(arg) as f:
-                    model = markovify.Text.from_json(f.read())
-
-                if self.model:
-                    self.model = markovify.combine(models=[self.model, model])
+                if arg.find('PARENTHETICALS') > -1:
+                    # join json
+                    with open(arg) as f:
+                        model = json.loads(f.read())
+                    if self.model:
+                        self.model += model
+                    else:
+                        self.model = model
                 else:
-                    self.model = model
+                    # generate model
+                    with open(arg) as f:
+                        model = markovify.Text.from_json(f.read())
+
+                    if self.model:
+                        self.model = markovify.combine(models=[self.model, model])
+                    else:
+                        self.model = model
                 
             # else:
             #     raise 
@@ -54,16 +65,20 @@ class HAL:
             os.makedirs(target_dir)
 
         for filename in os.listdir(source_dir):
+            print(filename)
+            path = os.path.join(source_dir, filename)
+            with open(path, encoding='utf-8') as f:
+                corpus = f.read()
             if filename.startswith('PAREN'):
-                print(filename)
-                path = os.path.join(source_dir, filename)
-                with open(path, encoding='utf-8') as f:
-                    corpus = f.read()
+                # store parentheticals as list
+                model = json.dumps(corpus.split('\n'))
+            else:
                 # create markov model from file
                 try:
                     model = markovify.Text(corpus, retain_original=False).to_json()
-                except:
+                except Exception as e:
+                    print(e.message)
                     pass
-                export_path = os.path.join(target_dir, f'{filename}.json')
-                with open(export_path, 'w', encoding='utf-8') as f:
-                    f.write(model)
+            export_path = os.path.join(target_dir, f'{filename}.json')
+            with open(export_path, 'w', encoding='utf-8') as f:
+                f.write(model)
