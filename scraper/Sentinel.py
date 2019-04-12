@@ -1,5 +1,6 @@
-# Sentinel.py
 """
+# Sentinel.py
+
 Parses screenplays into subsections: headings, transitions, actions, paretheticals, and dialogue,
 to be further prepared into Markov models.
 """
@@ -16,17 +17,27 @@ def remove_tags(markup):
     return re.sub(pattern, '', markup)
 
 
+def clean(line):
+    """
+    returns line with undesirable characters removed
+    """
+    line = remove_tags(line)
+    line = re.sub(re.compile(r'^\.{4,}'), '', line)
+    line = re.sub(re.compile(r'^-{4,}'), '', line)
+    line = re.sub(re.compile(r'^\d.?'), '', line)
+    return line
+
 def get_lines_from_block(text):
     """
     finds the first matching multi-line block of text
     returns tuple of (num_lines, block)
     """
     ml_block = []
-    line = remove_tags(text[0])
+    line = clean(text[0])
     cur_indent = len(line) - len(line.lstrip())
 
     for i in range(len(text)):
-        next_line = remove_tags(text[i])
+        next_line = clean(text[i])
         next_indent = len(next_line) - len(next_line.lstrip())
 
         if cur_indent == next_indent: # multiline block
@@ -77,7 +88,7 @@ def parse(directory='.', genre='All'):
             i = 0
 
             while i < len(screenplay):
-                line = remove_tags(screenplay[i])
+                line = clean(screenplay[i])
                 deline = line.strip()
 
                 # Empty
