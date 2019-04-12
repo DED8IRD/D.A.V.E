@@ -21,24 +21,15 @@ class HAL:
 
         for arg in args:
             if type(arg) is str and arg.endswith('.json'):
-                if arg.find('PARENTHETICALS') > -1:
-                    # join json
-                    with open(arg) as f:
-                        model = json.loads(f.read())
-                    if self.model:
-                        self.model += model
-                    else:
-                        self.model = model
-                else:
-                    # generate model
-                    with open(arg) as f:
-                        model = markovify.Text.from_json(f.read())
+                # generate model
+                with open(arg) as f:
+                    model = markovify.Text.from_json(f.read())
 
-                    if self.model:
-                        self.model = markovify.combine(models=[self.model, model])
-                    else:
-                        self.model = model
-                
+                if self.model:
+                    self.model = markovify.combine(models=[self.model, model])
+                else:
+                    self.model = model
+            
             # else:
             #     raise 
 
