@@ -54,7 +54,7 @@ class Clark:
         else:
             left_pad = page_width - right - len(line)
             line = ' '*left_pad + line
-        self.lines.append(line)
+        self.lines.append(line + '\n')
 
     def format(self, text, left=LEFT_MARGIN, right=RIGHT_MARGIN, 
                max_width=MAX_WIDTH, align='LEFT', page_width=PAGE_WIDTH):
@@ -78,6 +78,7 @@ class Clark:
                 remaining_width = max_width - len(current_line)
 
         self.__format_line(current_line, align, left, right, page_width)
+        self.lines.append('\n')
 
     def __write_plaintext(self, path):
         """
@@ -86,7 +87,7 @@ class Clark:
         pages = self.title_page
 
         for i in range(0, len(self.lines), self.MAX_LENGTH):
-            page = '\n'.join(self.lines[i:i+self.MAX_LENGTH])
+            page = ''.join(self.lines[i:i+self.MAX_LENGTH])
             page_number = '\n'*2 + ' '*(self.PAGE_WIDTH - self.LEFT_MARGIN) + \
                           str(i // self.MAX_LENGTH + 1) + '\n'*2
             pages += page_number + page + '\n' * 4
@@ -100,7 +101,7 @@ class Clark:
         """
         pdf = PDF(orientation='P', unit='in', format='Letter')
         pdf.set_font(family='Courier', size=12)
-        pdf.set_margins(left=0.25, top=1, right=0.5)
+        pdf.set_margins(left=0, top=1, right=0.5)
         pdf.alias_nb_pages()
         pdf.set_auto_page_break(auto=True, margin=1)
 
