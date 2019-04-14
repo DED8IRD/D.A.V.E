@@ -105,7 +105,9 @@ def parse(directory='.', genre='All'):
                     # Parenthetical
                     elif deline[0] == '(':
                         if deline[-1] == ')':
-                            categories['parentheticals'].append(deline[1:len(deline)-1])
+                            paren = deline[1:len(deline)-1].strip()
+                            if paren:
+                                categories['parentheticals'].append(paren)
 
                     elif deline.isupper():
 
