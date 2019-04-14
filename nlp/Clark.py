@@ -4,6 +4,20 @@ Generates formatted screenplays
 """
 from fpdf import FPDF
 
+class PDF(FPDF):
+    """
+    PDF writer class with page number in top right margin
+    """
+    def footer(self):
+        # Position at 1.5 cm from top
+        self.set_y(15)
+        # Courier regular 13pt font
+        self.set_font('Courier', '', 12)
+        # Page number
+        if self.page_no():
+            self.cell(0, 10, str(self.page_no()), 0, 0, 'R')
+
+
 class Clark:
     """
     Clark generates whitespace formatted screenplays as plaintext files
@@ -81,8 +95,8 @@ class Clark:
         """
         writes screenplay as plaintext file
         """
-        pages = ''
-        for i in range(len(self.pages)):
+        pages = self.pages[0]
+        for i in range(1, len(self.pages)):
             page_number = '\n'*2 + ' '*(self.PAGE_WIDTH - 15) + str(i) + '\n'*2
             pages += page_number + self.pages[i] + '\n'
 
@@ -93,13 +107,16 @@ class Clark:
         """
         writes screenplay as pdf
         """
-        pdf = FPDF()
+        pdf = PDF()
         pdf.set_font('Courier', '', 12)
+        pdf.set_top_margin(10)
+        pdf.alias_nb_pages()
+
         for page in self.pages:
             page = page.split('\n')
             pdf.add_page()
             for line in page:
-                pdf.multi_cell(0, 4, line, 0, 'L')
+                pdf.multi_cell(0, 3, line, 0, 'L')
                 pdf.ln()
         pdf.output(path + '.pdf', 'F')
 
