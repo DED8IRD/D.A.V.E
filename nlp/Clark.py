@@ -33,7 +33,6 @@ class Clark:
 
         self.pages.append(title_page) 
 
-
     def __format_line(self, line, align, left, right, page_width):
         """
         formats line to page
@@ -55,7 +54,7 @@ class Clark:
         tokens = text.split()
         remaining_tokens = len(tokens)
         remaining_width = max_width
-        current_line = '\n'
+        current_line = ''
 
         for token in tokens:
             token_length = len(token)
@@ -73,6 +72,7 @@ class Clark:
                     self.pages.append('\n'.join(self.current_page))
                     self.current_page = [' '*(self.MAX_WIDTH - 5) + str(len(self.pages))]
         self.__format_line(current_line, align, left, right, page_width)
+        self.current_page.append('\n')
 
     def write(self, path):
         """
