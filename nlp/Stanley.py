@@ -81,25 +81,25 @@ class Stanley:
         generates heading
         """
         prefix = choice(['INT.', 'EXT.'])
-        return prefix +' '+ self.generate('headings', max_length)
+        return prefix +' '+ self.generate('headings', max_length) + '\n'
 
     def generate_parenthetical(self, max_length=45):
         """
         generates parenthetical
         """
-        return '(' +choice(self.parentheticals)+ ')'
+        return '(' +choice(self.parentheticals)+ ')' + '\n'
 
     def generate_dialogue(self, max_length=500):
         """
         generates dialogue
         """
-        return self.generate('dialogue', max_length)
+        return self.generate('dialogue', max_length) + '\n'
 
     def generate_action(self, max_length=250):
         """
         generates action
         """
-        return self.generate('actions', max_length)
+        return self.generate('actions', max_length) + '\n'
 
     def generate_character(self):
         """
@@ -132,4 +132,5 @@ class Stanley:
             self.writer.format(self.generate_parenthetical(), *PARENTHETICAL_MARGIN)
             self.writer.format(self.generate_dialogue(), *DIALOGUE_MARGIN)
 
-        self.writer.write(self.title + '.txt')
+        self.writer.write(self.title, 'PLAINTEXT')
+        self.writer.write(self.title, 'PDF')
