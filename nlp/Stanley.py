@@ -113,7 +113,7 @@ class Stanley:
         """
         return choice(self.transitions)
 
-    def direct(self):
+    def direct(self, length=100):
         """
         generate tab formatted screenplay
         """
@@ -124,13 +124,25 @@ class Stanley:
         ACTION_MARGIN = (15, 10, 59, 'LEFT')
         TRANSITION_MARGIN = (59, 10, 15, 'RIGHT')
 
-        for _ in range(100):
+        def dialogue(amount):
+            """
+            generates dialogue between characters
+            """
+            characters = [self.generate_character() for _ in range(choice([1,2,3]))]
+            prev_character = None
+            for _ in range(amount):
+                character = choice(characters)
+                if character != prev_character:
+                    self.writer.format(character, *CHARACTER_MARGIN)
+                    self.writer.format(self.generate_parenthetical(), *PARENTHETICAL_MARGIN)
+                    prev_character = character
+                self.writer.format(self.generate_dialogue(), *DIALOGUE_MARGIN)                           
+
+        for _ in range(length):
             self.writer.format(self.generate_transition(), *TRANSITION_MARGIN)
             self.writer.format(self.generate_heading(), *HEADING_MARGIN)
             self.writer.format(self.generate_action(), *ACTION_MARGIN)
-            self.writer.format(self.generate_character(), *CHARACTER_MARGIN)
-            self.writer.format(self.generate_parenthetical(), *PARENTHETICAL_MARGIN)
-            self.writer.format(self.generate_dialogue(), *DIALOGUE_MARGIN)
+            dialogue(choice([1,2,3,4]))
 
         self.writer.write(self.title, 'PLAINTEXT')
         self.writer.write(self.title, 'PDF')
