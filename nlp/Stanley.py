@@ -77,40 +77,28 @@ class Stanley:
         return sentence
 
     def generate_heading(self, max_length=45):
-        """
-        generates heading
-        """
+        """ generates heading """
         prefix = choice(['INT.', 'EXT.'])
         return prefix +' '+ self.generate('headings', max_length)
 
     def generate_parenthetical(self, max_length=45):
-        """
-        generates parenthetical
-        """
+        """ generates parenthetical """
         return '(' +choice(self.parentheticals)+ ')'
 
     def generate_dialogue(self, max_length=500):
-        """
-        generates dialogue
-        """
+        """ generates dialogue """
         return self.generate('dialogue', max_length)
 
     def generate_action(self, max_length=250):
-        """
-        generates action
-        """
+        """ generates action """
         return self.generate('actions', max_length)
 
     def generate_character(self):
-        """
-        randomly selects character
-        """
+        """ randomly selects character """
         return choice(self.characters)
 
     def generate_transition(self):
-        """
-        randomly selects transition
-        """
+        """ randomly selects transition """
         return choice(self.transitions)
 
     def direct(self, length=100):
