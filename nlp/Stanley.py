@@ -7,8 +7,8 @@ import json
 import os
 import time
 from random import choice
-from HAL import HAL # markov model generator
-from Clark import Clark # text formatter
+from .HAL import HAL # markov model generator
+from .Clark import Clark # text formatter
 
 class Stanley:
     """
