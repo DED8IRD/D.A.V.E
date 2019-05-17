@@ -13,6 +13,11 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/DED8IRD/D.A.V.E",
     packages=setuptools.find_packages(),
+    # packages=[
+    #     'DAVE',
+    #     'DAVE.nlp',
+    #     'DAVE.scraper',
+    # ],
     include_package_data=True,
     zip_safe=False,
     classifiers=[

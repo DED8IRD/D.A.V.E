@@ -4,7 +4,7 @@ Server side logic for D.A.V.E, the screenplay generating bot
 Written in Flask
 """
 from flask import Flask, request
-from ..nlp.Stanley import *
+from nlp.Stanley import Stanley as Director
 
 
 app = Flask(__name__)
@@ -21,6 +21,11 @@ def index():
 
 @app.route('/screenwrite/', methods=['GET', 'POST'])
 def screenwrite():
+    genres = ['western']
+    characters = ['bob', 'bobby', 'bobra', 'bobert']
+    source = '../nlp/markov_models'    
+    director = Director(genres, characters, source)
+    director.direct()
     pass
 
 
