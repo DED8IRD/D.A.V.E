@@ -1,0 +1,13 @@
+from nlp.Stanley import *
+genres = ['western']
+characters = ['bob', 'bobby', 'bobra', 'bobert']
+source = 'nlp/markov_models'
+
+director = Stanley(genres, characters, source)
+
+director.direct()
+
+
+from nlp.Stanley import *
+director = Stanley(['western'], ['bob', 'bobby', 'bobra', 'bobert'], 'nlp/markov_models')
+director.direct()
