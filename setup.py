@@ -16,7 +16,6 @@ setuptools.setup(
         'DAVE',
         'DAVE.nlp',
         'DAVE.scraper',
-        'DAVE.server',
     ],    
     include_package_data=True,
     zip_safe=False,
