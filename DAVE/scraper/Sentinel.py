@@ -136,10 +136,16 @@ def parse(directory='.', genre='All'):
 
                 i += 1
 
+    # create directory if it doesn't exist
+    try:
+        os.mkdir('parsed_categories')
+    except FileExistsError:
+        pass
+
     # write to files
     if genre != 'All':
         for key in categories:
-            filename = f'./parsed_categories/{key.upper()}_{genre}'
+            filename = f'parsed_categories/{key.upper()}_{genre}'
             with open(filename, 'w', encoding='utf-8') as f:
                 f.write('\n'.join(categories[key]))
         return categories

@@ -1,11 +1,14 @@
 import setuptools
 
-# with open("README.md", "r") as fh:
-#     long_description = fh.read()
+# with open("README.md", "r") as f:
+#     long_description = f.read()
+
+with open("requirements.txt") as f:
+    requirements = f.readlines()
 
 setuptools.setup(
     name="DAVE_bot_DED8IRD",
-    version="1.0.1",
+    version="1.0.4",
     author="Eunika Wu",
     author_email="eunika@pdxcodeguild.com",
     description="A screenplay bot",
@@ -24,4 +27,5 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    install_requries=requirements,
 )
