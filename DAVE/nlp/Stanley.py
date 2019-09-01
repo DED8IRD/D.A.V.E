@@ -28,7 +28,7 @@ class Stanley:
         :characters: list : list of characters for screenplay 
         """
         start = time.time()
-        genres = [genre.upper() for genre in genres]
+        genres = [genre.capitalize() for genre in genres]
         self.title = title
         self.author = author
         self.directory = directory

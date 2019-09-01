@@ -1,7 +1,38 @@
-from DAVE.nlp.Stanley import *
+# Scripts
+
+## Scraper module
+### Scraping Screenplays
+`Dave.scraper.DiscoveryOne` scrapes from IMSDB using BeautifulSoup
+```py
+from DAVE.scraper import DiscoveryOne, Sentinel
+DiscoveryOne.crawl(path, directory='.', pattern=GENRE):
+```
+
+### Parse
+`DAVE.scraper.Sentinel` creates a directory `/parsed_categories/` and parses screenplays into subsections: headings, transitions, actions, paretheticals, and dialogue, to be further prepared into Markov models.
+```py
+Sentinel.parse(directory='.', genre='All')
+```
+
+## NLP module
+### Serialize markov models
+`DAVE.nlp.HAL` generates Markov chains from the parsed categories made by `DAVE.scraper.Sentinel` and serializes the models into JSON.
+
+To create the Markov models:
+```py
+from DAVE.nlp.HAL import HAL
+HAL.generate_models(source_dir='parsed_categories', target_dir='.')
+```
+
+### Generate screenplays
+`DAVE.nlp.Stanley` generates formatted screenplays using Markov chains.
+
+```py
+from DAVE.nlp.Stanley import Stanley
 genres = ['western']
 characters = ['bob', 'bobby', 'bobra', 'bobert']
 source = 'DAVE/nlp/markov_models'
 
-director = Stanley(genres, characters, source)
-director.direct()
+director = Stanley(genres, characters, directory=source, title='Untitled', author='Anonymous')
+director.direct(length=100)
+```
