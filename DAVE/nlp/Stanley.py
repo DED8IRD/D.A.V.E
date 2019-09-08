@@ -69,15 +69,6 @@ class Stanley:
         self.writer = Clark(title, author)
         print(f'Completed model rehydration in {time.time() - start} s.')
 
-    def __filenames(self, category, directory):
-        """
-        returns list of filepaths from directory, category, and source
-        :category: str : name of category
-        :directory: list : list of sources
-        """
-        return [os.path.join(directory, f'{category}_{source}.json')
-                for source in directory]
-
     def __get_parentheticals(self, file):
         """
         loads parentheticals from json
