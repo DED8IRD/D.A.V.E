@@ -44,16 +44,15 @@ class HAL:
 
 
     @staticmethod
-    def generate_models(source_dir, target_dir='.'):
+    def generate_models(source, target='.'):
         """
-        Generates Markov models for each category and genre 
-        and saves them as JSON
+        Generates Markov models for each category and saves them as JSON
         """
-        if not os.path.exists(target_dir):
-            os.makedirs(target_dir)
+        if not os.path.exists(target):
+            os.makedirs(target)
 
-        for filename in os.listdir(source_dir):
-            path = os.path.join(source_dir, filename)
+        for filename in os.listdir(source):
+            path = os.path.join(source, filename)
             with open(path, encoding='utf-8') as f:
                 corpus = f.read()
             if filename.startswith('PAREN'):
@@ -65,6 +64,6 @@ class HAL:
                     model = markovify.Text(corpus, retain_original=False).to_json()
                 except Exception as e:
                     pass
-            export_path = os.path.join(target_dir, f'{filename}.json')
+            export_path = os.path.join(target, f'{filename}.json')
             with open(export_path, 'w', encoding='utf-8') as f:
                 f.write(model)
