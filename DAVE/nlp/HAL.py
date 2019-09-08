@@ -30,9 +30,6 @@ class HAL:
                 else:
                     self.model = model
             
-            # else:
-            #     raise 
-
 
     def generate_sentence(self, max_length=None):
         """
@@ -56,7 +53,6 @@ class HAL:
             os.makedirs(target_dir)
 
         for filename in os.listdir(source_dir):
-            print(filename)
             path = os.path.join(source_dir, filename)
             with open(path, encoding='utf-8') as f:
                 corpus = f.read()
@@ -68,7 +64,6 @@ class HAL:
                 try:
                     model = markovify.Text(corpus, retain_original=False).to_json()
                 except Exception as e:
-                    print(e.message)
                     pass
             export_path = os.path.join(target_dir, f'{filename}.json')
             with open(export_path, 'w', encoding='utf-8') as f:

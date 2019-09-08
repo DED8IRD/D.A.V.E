@@ -9,9 +9,14 @@ DiscoveryOne.crawl(path, directory='.', pattern=GENRE):
 ```
 
 ### Parse
-`DAVE.scraper.Sentinel` creates a directory `/parsed_categories/` and parses screenplays into subsections: headings, transitions, actions, paretheticals, and dialogue, to be further prepared into Markov models.
+`DAVE.scraper.Sentinel`  and parses screenplays into subsections: headings, transitions, actions, parentheticals, and dialogue, to be further prepared into Markov models.
 ```py
-Sentinel.parse(directory='.', genre='All')
+Sentinel.parse(*sources, destination='.', write=True)
+```
+
+Or, parse recursively using `Sentinel.parse_directory`
+```py
+Sentinel.parse_directory(source='.', destination='parsed_categories', genre='All')`
 ```
 
 ## NLP module
@@ -29,10 +34,9 @@ HAL.generate_models(source_dir='parsed_categories', target_dir='.')
 
 ```py
 from DAVE.nlp.Stanley import Stanley
-genres = ['western']
 characters = ['bob', 'bobby', 'bobra', 'bobert']
-source = 'DAVE/nlp/markov_models'
+source = ['DAVE/nlp/markov_models/Western']
 
-director = Stanley(genres, characters, directory=source, title='Untitled', author='Anonymous')
+director = Stanley(source, characters, target='output', title='Untitled', author='Anonymous')
 director.direct(length=100)
 ```

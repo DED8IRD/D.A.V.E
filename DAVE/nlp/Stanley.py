@@ -7,8 +7,19 @@ import json
 import os
 import time
 from random import choice
+from DAVE.scraper import Sentinel # parser
 from DAVE.nlp.HAL import HAL # markov model generator
 from DAVE.nlp.Clark import Clark # text formatter
+
+def get_or_create_dir(*args):
+    """
+    creates directory if it does not exist
+    """
+    path = os.path.join(*args)
+    if not os.path.exists(path):
+        os.makedirs(path)
+    return path
+
 
 class Stanley:
     """
@@ -19,52 +30,64 @@ class Stanley:
     DIALOGUE = 'DIALOGUE'
     ACTIONS = 'ACTIONS'
 
-    def __init__(self, genres, characters, 
-                directory='.', title='Untitled', author='Anonymous'):
+    def __init__(self, sources, characters, target='.', 
+                title='Untitled', author='Anonymous'):
         """
-        Initializes HAL objects by deserializing Markov models
+        Parses source screenplays
+        Generates Markov models
+        Initializes HAL objects by deserializing models
 
-        :genres: list : genre(s) for Markov models
+        :sources: list : directory(s) for Markov models
         :characters: list : list of characters for screenplay 
         """
-        start = time.time()
-        genres = [genre.capitalize() for genre in genres]
         self.title = title
         self.author = author
-        self.directory = directory
-        self.headings = HAL(*self.__filenames(self.HEADINGS, genres))
+        self.target = target
+        
+        start = time.time()
+        parsed = get_or_create_dir(target, 'parsed')
+        Sentinel.parse(*sources, destination=parsed, write=True)
+        print(f'Parsing screenplays in {time.time() - start} s.')
+
+        start = time.time()
+        models = get_or_create_dir(target, 'models')
+        HAL.generate_models(parsed, models)
+        print(f'Generating Markov models in {time.time() - start} s.')
+
+        start = time.time()
+        self.headings = HAL(os.path.join(models, self.HEADINGS + '.json'))
         self.parentheticals = []
-        self.dialogue = HAL(*self.__filenames(self.DIALOGUE, genres))
-        self.actions = HAL(*self.__filenames(self.ACTIONS, genres))
+        self.dialogue = HAL(os.path.join(models, self.DIALOGUE + '.json'))
+        self.actions = HAL(os.path.join(models, self.ACTIONS + '.json'))
         self.characters = [char.upper() for char in characters]
         self.transitions = [
             'CUT TO:', 'CONTINUED:', 'FADE TO BLACK:', 'FADE IN:', 'FADE OUT:', 
             'PAN IN:', 'PAN OUT:', 'DISSOLVE TO:', 'FLASH CUT:', 'SMASH CUT:', 
             'TIME CUT:', 'MATCH CUT:'
         ]
-        self.__get_parentheticals(self.__filenames(self.PARENTHETICALS, genres))
+        self.__get_parentheticals(os.path.join(models, self.PARENTHETICALS + '.json'))
         self.writer = Clark(title, author)
         print(f'Completed model rehydration in {time.time() - start} s.')
 
-    def __filenames(self, category, genres):
+    def __filenames(self, category, directory):
         """
-        returns list of filepaths from directory, category, and genres
+        returns list of filepaths from directory, category, and source
         :category: str : name of category
-        :genres: list : list of genres
+        :directory: list : list of sources
         """
-        return [os.path.join(self.directory, f'{category}_{genre}.json')
-                for genre in genres]
+        return [os.path.join(directory, f'{category}_{source}.json')
+                for source in directory]
 
-    def __get_parentheticals(self, files):
+    def __get_parentheticals(self, file):
         """
         loads parentheticals from json
         """
-        for file in files:
-            if type(file) is str and file.endswith('.json'):
-                # join json
-                with open(file) as f:
-                    model = json.loads(f.read())
-                self.parentheticals += model
+        # for file in files:
+        if type(file) is str and file.endswith('.json'):
+            # join json
+            with open(file) as f:
+                model = json.loads(f.read())
+            self.parentheticals += model
 
     def generate(self, attr, max_length=None):
         """
@@ -132,5 +155,6 @@ class Stanley:
             self.writer.format(self.generate_action(), *ACTION_MARGIN)
             dialogue(choice([1,2,3,4]))
 
-        self.writer.write(self.title, 'PLAINTEXT')
-        self.writer.write(self.title, 'PDF')
+        path = os.path.join(self.target, self.title)
+        self.writer.write(path, 'PLAINTEXT')
+        self.writer.write(path, 'PDF')
