@@ -65,7 +65,7 @@ class Stanley:
             'TIME CUT:', 'MATCH CUT:'
         ]
         self.__get_parentheticals(os.path.join(models, self.PARENTHETICALS + '.json'))
-        self.writer = Clarke(title, author)
+        self.writer = Clarke(self.title, self.author)
         print(f'Completed model rehydration in {time.time() - start} s.')
 
     def __get_parentheticals(self, file):
