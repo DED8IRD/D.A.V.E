@@ -1,4 +1,20 @@
-# Scripts
+# D.A.V.E.
+Meet DAVE, the screenwriting bot
+
+## Stanley module
+### Generate screenplays
+`DAVE.nlp.Stanley` uses all the modules below (except web scraping) to generate formatted screenplays (PDF and plaintext).
+
+Example:
+```py
+from DAVE.nlp.Stanley import Stanley
+characters = ['HAL', 'DAVE', 'Stanley Kubrick', 'Discovery One', 
+              'Arthur C. Clarke', 'The Sentinel']
+source = ['2001-A-Space-Odyssey.txt']
+
+director = Stanley(source, characters, destination='output', title='2002', author='DAVE')
+director.direct(length=100)
+```
 
 ## Scraper module
 ### Scraping Screenplays
@@ -27,18 +43,4 @@ To create the Markov models:
 ```py
 from DAVE.nlp.HAL import HAL
 HAL.generate_models(source='parsed_categories', destination='.')
-```
-
-### Generate screenplays
-`DAVE.nlp.Stanley` uses all the modules above (except web scraping) to generate formatted screenplays.
-
-Example:
-```py
-from DAVE.nlp.Stanley import Stanley
-characters = ['HAL', 'DAVE', 'Stanley Kubrick', 'Discovery One', 
-              'Arthur C. Clarke', 'The Sentinel']
-source = ['2001-A-Space-Odyssey.txt']
-
-director = Stanley(source, characters, destination='output', title='2002', author='DAVE')
-director.direct(length=100)
 ```
