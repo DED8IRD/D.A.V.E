@@ -1,18 +1,18 @@
 import setuptools
 
-# with open("README.md", "r") as f:
-#     long_description = f.read()
+with open("README.md", "r") as f:
+    long_description = f.read()
 
 with open("requirements.txt") as f:
     requirements = f.readlines()
 
 setuptools.setup(
     name="DAVE_bot_DED8IRD",
-    version="1.0.5",
+    version="1.0.6",
     author="Eunika Wu",
     author_email="eunika@pdxcodeguild.com",
     description="A screenplay bot",
-    long_description=__doc__,
+    long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/DED8IRD/D.A.V.E",
     packages=[
