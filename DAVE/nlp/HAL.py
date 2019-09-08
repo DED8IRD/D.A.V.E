@@ -44,12 +44,12 @@ class HAL:
 
 
     @staticmethod
-    def generate_models(source, target='.'):
+    def generate_models(source, destination='.'):
         """
         Generates Markov models for each category and saves them as JSON
         """
-        if not os.path.exists(target):
-            os.makedirs(target)
+        if not os.path.exists(destination):
+            os.makedirs(destination)
 
         for filename in os.listdir(source):
             path = os.path.join(source, filename)
@@ -64,6 +64,6 @@ class HAL:
                     model = markovify.Text(corpus, retain_original=False).to_json()
                 except Exception as e:
                     pass
-            export_path = os.path.join(target, f'{filename}.json')
+            export_path = os.path.join(destination, f'{filename}.json')
             with open(export_path, 'w', encoding='utf-8') as f:
                 f.write(model)

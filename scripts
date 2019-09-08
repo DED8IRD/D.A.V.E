@@ -26,17 +26,19 @@ Sentinel.parse_directory(source='.', destination='parsed_categories', genre='All
 To create the Markov models:
 ```py
 from DAVE.nlp.HAL import HAL
-HAL.generate_models(source_dir='parsed_categories', target_dir='.')
+HAL.generate_models(source='parsed_categories', destination='.')
 ```
 
 ### Generate screenplays
-`DAVE.nlp.Stanley` generates formatted screenplays using Markov chains.
+`DAVE.nlp.Stanley` uses all the modules above (except web scraping) to generate formatted screenplays.
 
+Example:
 ```py
 from DAVE.nlp.Stanley import Stanley
-characters = ['bob', 'bobby', 'bobra', 'bobert']
-source = ['DAVE/nlp/markov_models/Western']
+characters = ['HAL', 'DAVE', 'Stanley Kubrick', 'Discovery One', 
+              'Arthur C. Clarke', 'The Sentinel']
+source = ['2001-A-Space-Odyssey.txt']
 
-director = Stanley(source, characters, target='output', title='Untitled', author='Anonymous')
+director = Stanley(source, characters, destination='output', title='2002', author='DAVE')
 director.direct(length=100)
 ```

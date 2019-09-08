@@ -1,4 +1,4 @@
-# Clark.py
+# Clarke.py
 """
 Generates formatted screenplays
 """
@@ -17,9 +17,9 @@ class PDF(FPDF):
             self.cell(0, 0.5, str(self.page_no() - 1), 0, 0, 'R')
 
 
-class Clark:
+class Clarke:
     """
-    Clark generates whitespace formatted screenplays as plaintext files
+    Clarke generates whitespace formatted screenplays as plaintext files
     """
     LEFT_MARGIN = 15
     RIGHT_MARGIN = 10

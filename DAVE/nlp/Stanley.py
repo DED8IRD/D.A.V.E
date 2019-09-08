@@ -7,9 +7,9 @@ import json
 import os
 import time
 from random import choice
-from DAVE.scraper import Sentinel # parser
-from DAVE.nlp.HAL import HAL # markov model generator
-from DAVE.nlp.Clark import Clark # text formatter
+from DAVE.scraper import Sentinel   # parser
+from DAVE.nlp.HAL import HAL        # markov model generator
+from DAVE.nlp.Clarke import Clarke  # text formatter
 
 def get_or_create_dir(*args):
     """
@@ -30,7 +30,7 @@ class Stanley:
     DIALOGUE = 'DIALOGUE'
     ACTIONS = 'ACTIONS'
 
-    def __init__(self, sources, characters, target='.', 
+    def __init__(self, sources, characters, destination='.', 
                 title='Untitled', author='Anonymous'):
         """
         Parses source screenplays
@@ -42,15 +42,15 @@ class Stanley:
         """
         self.title = title
         self.author = author
-        self.target = target
+        self.destination = destination
         
         start = time.time()
-        parsed = get_or_create_dir(target, 'parsed')
+        parsed = get_or_create_dir(destination, 'parsed')
         Sentinel.parse(*sources, destination=parsed, write=True)
         print(f'Parsing screenplays in {time.time() - start} s.')
 
         start = time.time()
-        models = get_or_create_dir(target, 'models')
+        models = get_or_create_dir(destination, 'models')
         HAL.generate_models(parsed, models)
         print(f'Generating Markov models in {time.time() - start} s.')
 
@@ -66,7 +66,7 @@ class Stanley:
             'TIME CUT:', 'MATCH CUT:'
         ]
         self.__get_parentheticals(os.path.join(models, self.PARENTHETICALS + '.json'))
-        self.writer = Clark(title, author)
+        self.writer = Clarke(title, author)
         print(f'Completed model rehydration in {time.time() - start} s.')
 
     def __get_parentheticals(self, file):
@@ -146,6 +146,6 @@ class Stanley:
             self.writer.format(self.generate_action(), *ACTION_MARGIN)
             dialogue(choice([1,2,3,4]))
 
-        path = os.path.join(self.target, self.title)
+        path = os.path.join(self.destination, self.title)
         self.writer.write(path, 'PLAINTEXT')
         self.writer.write(path, 'PDF')
