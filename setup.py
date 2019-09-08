@@ -8,7 +8,7 @@ with open("requirements.txt") as f:
 
 setuptools.setup(
     name="DAVE_bot_DED8IRD",
-    version="1.0.6",
+    version="1.0.7",
     author="Eunika Wu",
     author_email="eunika@pdxcodeguild.com",
     description="A screenplay bot",
