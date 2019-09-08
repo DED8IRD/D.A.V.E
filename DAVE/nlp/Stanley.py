@@ -30,8 +30,7 @@ class Stanley:
     DIALOGUE = 'DIALOGUE'
     ACTIONS = 'ACTIONS'
 
-    def __init__(self, sources, characters, destination='.', 
-                title='Untitled', author='Anonymous'):
+    def __init__(self, sources, characters, **kwargs):
         """
         Parses source screenplays
         Generates Markov models
@@ -40,26 +39,26 @@ class Stanley:
         :sources: list : directory(s) for Markov models
         :characters: list : list of characters for screenplay 
         """
-        self.title = title
-        self.author = author
-        self.destination = destination
+        self.title = kwargs.get('title', 'Untitled')
+        self.author = kwargs.get('author', 'Anonymous')
+        self.destination = kwargs.get('destination', '.')
         
         start = time.time()
-        parsed = get_or_create_dir(destination, 'parsed')
+        parsed = get_or_create_dir(self.destination, 'parsed')
         Sentinel.parse(*sources, destination=parsed, write=True)
         print(f'Parsing screenplays in {time.time() - start} s.')
 
         start = time.time()
-        models = get_or_create_dir(destination, 'models')
+        models = get_or_create_dir(self.destination, 'models')
         HAL.generate_models(parsed, models)
         print(f'Generating Markov models in {time.time() - start} s.')
 
         start = time.time()
         self.headings = HAL(os.path.join(models, self.HEADINGS + '.json'))
-        self.parentheticals = []
         self.dialogue = HAL(os.path.join(models, self.DIALOGUE + '.json'))
         self.actions = HAL(os.path.join(models, self.ACTIONS + '.json'))
         self.characters = [char.upper() for char in characters]
+        self.parentheticals = []
         self.transitions = [
             'CUT TO:', 'CONTINUED:', 'FADE TO BLACK:', 'FADE IN:', 'FADE OUT:', 
             'PAN IN:', 'PAN OUT:', 'DISSOLVE TO:', 'FLASH CUT:', 'SMASH CUT:', 
