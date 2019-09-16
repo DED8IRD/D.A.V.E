@@ -7,8 +7,8 @@ with open("requirements.txt") as f:
     requirements = f.readlines()
 
 setuptools.setup(
-    name="DAVE_bot_DED8IRD",
-    version="1.0.7",
+    name="davebot",
+    version="1.0.0",
     author="Eunika Wu",
     author_email="eunika@pdxcodeguild.com",
     description="A screenplay bot",
