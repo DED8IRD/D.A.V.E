@@ -66,7 +66,7 @@ The original inspiration for this project comes from a short science fiction fil
 
 Description (from Ars Technica):
 
-    In the wake of Google's AI Go victory, filmmaker Oscar Sharp turned to his technologist collaborator Ross Goodwin to build a machine that could write screenplays. They created "Jetson" and fueled him with hundreds of sci-fi TV and movie scripts. Building a team including Thomas Middleditch, star of HBO's Silicon Valley, they gave themselves 48 hours to shoot and edit whatever Jetson decided to write.
+> In the wake of Google's AI Go victory, filmmaker Oscar Sharp turned to his technologist collaborator Ross Goodwin to build a machine that could write screenplays. They created "Jetson" and fueled him with hundreds of sci-fi TV and movie scripts. Building a team including Thomas Middleditch, star of HBO's Silicon Valley, they gave themselves 48 hours to shoot and edit whatever Jetson decided to write.
 
 
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=LY7x2Ihqjmc" target="_blank"><img src="http://img.youtube.com/vi/LY7x2Ihqjmc/0.jpg" 
