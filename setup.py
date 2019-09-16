@@ -3,9 +3,9 @@ import setuptools
 with open("README.md", "r") as f:
     long_description = f.read()
 
-with open("requirements.txt") as f:
-    requirements = f.readlines()
-
+with open("requirements.txt", 'r') as f:
+    requirements = f.read().split()
+print(requirements)
 setuptools.setup(
     name="davebot",
     version="1.0.0",
@@ -27,5 +27,5 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    install_requries=requirements,
+    install_requires=requirements,
 )

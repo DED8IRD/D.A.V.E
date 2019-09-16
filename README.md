@@ -18,9 +18,9 @@ Example:
 from DAVE.nlp.Stanley import Stanley
 characters = ['HAL', 'DAVE', 'Stanley Kubrick', 'Discovery One', 
               'Arthur C. Clarke', 'The Sentinel']
-source = ['2001-A-Space-Odyssey.txt']
+source = ['2001-A-Space-Odyssey.txt', '2012.txt']
 
-director = Stanley(source, characters, destination='output', title='2002', author='DAVE')
+director = Stanley(source, characters, destination='output', title='2013', author='DAVE')
 director.direct(length=100)
 ```
 
